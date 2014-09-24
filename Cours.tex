@@ -1,0 +1,149 @@
+%%%%%%%%%%%%%
+% Préambule %
+%%%%%%%%%%%%%
+
+\documentclass[12pt,a4paper,oneside,fleqn]{book} % Utiliser article si nécessaire
+\usepackage[latin1]{inputenc} % Pour les accents
+\usepackage[T1]{fontenc} 
+\usepackage[francais]{babel} % Pour la typographie
+\usepackage[usenames]{color} % Pour les couleurs
+\usepackage{amssymb} % Pour les symboles
+\usepackage{amsmath} % Pour les maths
+\usepackage{amsthm} % Pour les théorèmes
+\usepackage{fullpage} % Pour les marges
+\usepackage{setspace} % Pour les espaces
+\usepackage{array} % Pour les tableaux
+\usepackage{tikz} % Pour les graphes
+\usepackage{pgfplots} % Pour les fonctions
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+\renewcommand\thesection{\Roman{section}}
+\renewcommand\thesubsection{\quad\arabic{subsection}}
+\renewcommand\thesubsubsection{\qquad\alph{subsubsection}}
+\newtheorem{example}{Exemple}
+\newtheorem{remark}{Remarque}
+
+% Commandes ponctuelles
+
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\diff}[1]{\,\mathrm{d}#1}
+\renewcommand{\L}[1]{\mathcal{L}\left\{#1\right\}}
+\newcommand{\Z}[1]{\mathcal{Z}\left\{#1\right\}}
+\newcommand{\Li}[1]{\mathcal{L}^{-1}\left\{#1\right\}}
+\newcommand{\Zi}[1]{\mathcal{Z}^{-1}\left\{#1\right\}}
+\onehalfspacing
+\onehalfspacing
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+
+\begin{document}
+
+\title{Deuxième année --- Méthodes mathématiques}
+\author{Richard \textsc{Degenne}, L3-B}
+\date{\today}
+
+
+\maketitle
+
+\pagebreak
+
+\tableofcontents
+
+\pagebreak
+
+\chapter{Intégrales générales, ou impropres}
+
+\section{Définition}
+
+Soit $I\subset\R$ un intervalle dont les extrémités $a<b$ (pouvant être $\pm\infty$) sont exclues et $f:I\to\R$ une fonction continue par morceaux sur $I$. Pour chaque intervalle $[x;y]\in I$, l'intégrale $\int_x^y f(t)\diff{t}$ est bien définie.
+
+Si, pour $x$ tendant vers $a$ et $y$ tendant vers $b$, l'intégrale admet une limite finie, alors on dit que l'intégrale impropre $\int_a^b f(t)\diff{t}$ est convergente, et, par définition,
+\[\int_a^b f(t)\diff{t}=\lim_{x\to a,y\to b}\int_x^y f(t)\diff{t}\]
+
+Si la limite est infinie ou s'il n'y a pas de limite, on dit que l'intégrale impropre est divergente.
+
+\subsection{Relation de Chasles}
+
+Pour $c\in I$, on a
+\[\int_x^y f(t)\diff{t} = \int_x^c f(t)\diff{t} \int_c^y f(t)\diff{t}\]
+
+Si une intégrale impropre converge, alors toute relation de Chasles formé à partir de cette intégrale converge également. En prenant le cas particulier $c=a$, on peut en déduire que
+\[\int_a^b f(t)\diff{t}\text{ converge}\begin{array}{l}\iff\lim_{y\to b}\int_a^y f(t)\diff{t}\text{ existe et est fini.}\\\iff\lim_{x\to a}\int_x^b f(t)\diff{t}\text{ existe et est fini.}\end{array}\]
+
+\section{Exemples}
+
+\begin{example}
+	\begin{align*}
+		\int_1^x\frac{1}{t^2}\diff{t} & = \left[-\frac{1}{t}\right]_1^x\\
+		                              & = 1-\frac{1}{x}\\
+	\end{align*}
+\end{example}
+
+\begin{example}
+	\begin{align*}
+		\int_1^\infty\frac{1}{t^2}\diff{t} & = \lim_{x\to+\infty}\int_1^x\frac{1}{t^2}\diff{t}\\
+		                                   & = \lim_{x\to+\infty}1-\frac{1}{x}\\
+		                                   & = 1
+	\end{align*}
+\end{example}
+
+\begin{example}
+	\begin{align*}
+		\int_1^\infty\frac{1}{t}\diff{t} & = \lim_{x\to+\infty}\int_1^x\frac{1}{t}\diff{t}\\
+		                                 & = \lim_{x\to+\infty}1-\ln(x)\\
+		                                 & = +\infty
+	\end{align*}
+\end{example}
+
+\begin{example}
+	\begin{align*}
+		\int_0^x\cos(t)\diff{t} & = [\sin(t)]_{0}^{x}\\
+		                        & = \sin(x)
+	\end{align*}
+
+	Or, $\lim_{x\to\infty}\sin(x)$ n'existe pas. Donc, $\int_0^x \cos(t)\diff{t}$ diverge.
+\end{example}
+
+\begin{example}
+	\begin{align*}
+		\int_0^\infty e^{-t}\diff{t} & = \lim_{x\to\infty}\int_0^x e^{-t}\diff{t}\\
+		                             & = \lim_{x\to\infty}[-e^{-t}]_0^x\\
+					     & = \lim_{x\to\infty}1-e^{-x}\\
+					     & = 1
+	\end{align*}
+\end{example}
+
+\begin{example}
+	\begin{align*}
+		\int_0^1 \frac{1}{\sqrt{t}}\diff{t} & = \lim_{x\to 0}\int_x^1 \frac{1}{\sqrt{t}}\diff{t}\\
+		                                    & = \lim_{x\to 0}\left[2\sqrt{t}\right]_x^1\\
+					            & = 2
+	\end{align*}
+\end{example}
+
+\section{Propriétés}
+
+Si $a$ et $b$ sont des valeurs finies et si $f$ est une fonction continue dans l'un des intervalles $[a;b[$, $]a;b]$ ou $]a;b[$ qui se prolonge par continuité à $[a;b]$, alors $\int_a^b f(t)\diff{t}$ converge.
+
+\begin{example}
+\[\int_0^1\frac{\sin(t)}{t}\diff{t}\]
+est convergente.\footnote{\emph{cf.} le développement limité de $\sin(t)$ au voisinage de $t$.}
+\end{example}
+
+Évidemment, les résultats et propriétés valables pour les intégrales classiques (changements de variable, intégration par parties, linéarité,\ldots) restent valables pour les intégrales impropres.
+
+\section{Intégrale absolument convergente}
+
+Soit $I$ un intervalle d'extrémités $a$ et $b$ appartenant à $\bar\R = \R\backslash\pm\infty$. Soit $f:I\to\R$ une fonction continue par morceaux et $g:I\to\R^+$ telle que $\forall t\in I,\lvert f(t)\rvert \le g(t)$. On a alors
+\[\int_a^b g(t)\diff{t}\text{ converge}\implies \int_a^b f(t)\diff{t}\text{ converge}\]
+
+Ainsi, on dit que $\int_a^b f(t)\diff{t}$ est absolument convergente si $\int_a^b\lvert f(t)\rvert\diff{t}$ converge. Toute intégrale imporpre absolument convergente est convergente.
+
+\begin{remark}
+	La réciproque est généralement fausse. Par exemple, $\int_0^\infty\frac{\sin(t)}{t}\diff{t}$ converge, mais $\int_0^\infty\left\lvert\frac{\sin(t)}{t}\right\rvert\diff{t}$ diverge.
+\end{remark}
+\end{document}

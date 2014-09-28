@@ -17,7 +17,7 @@
 \usepackage{pgfplots} % Pour les fonctions
 
 \setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{1}
 \renewcommand\thesection{\Roman{section}}
 \renewcommand\thesubsection{\quad\arabic{subsection}}
 \renewcommand\thesubsubsection{\qquad\alph{subsubsection}}
@@ -261,4 +261,127 @@ Soit $(u_n)_{n\in\N}$ une suite de nombres complexes. Une série est dite absolum
 \begin{remark}[Cas des séries alternées]
 	Soit $(u_n)$ une suite de nombres réels alternativement positifs et négatifs. Si la suite $(\vert u_n\vert)$ est décroissante et si $\lim_{n\to\infty} \vert u_n\vert = 0$, alors $\sum_{n=0}^\infty$ est convergente.
 \end{remark}
+
+\chapter{Transformée de Laplace}
+
+\section{Intégrale de Laplace}
+
+\subsection{Définition}
+
+Soit $f$ une fonction définie sur $\R$ et supposée nulle pour tout $t<0$.\footnote{On parle alors de fonction causale.} On appelle transformée de Laplace de $f$ la fonction $F$ définie par
+\[F(p) = \int_0^\infty e^{-pt}f(t)\diff{t}\]
+où $p$ est une variable complexe.
+
+On écrit $F(p) = \L{f(t)}$, ou bien $f(t)\xrightarrow{\mathcal{L}}F(p)$. On dit que $F(p)$ est l'image de $f(t)$ et que $f(t)$ est l'originial de $F(p)$.
+
+\begin{remark}
+$F(p)$ est bien à valeur dans $\C$ bien que $f(t)$ soit à valeurs dans $\R$.
+\end{remark}
+
+\subsection{Conditions d'existence}
+
+La transformée de Laplace d'une fonction $f(t)$ n'existe que si $\int_0^\infty e^{-pt}f(t)\diff{t}$ converge. On est alors amené à définir deux conditions sur $f$ pour s'assurer de l'existence de sa transformée de Laplace :
+
+\begin{itemize}
+	\item{Elle doit être continue par morceau sur tout intervalle $[0;t_0]$ de $\R$ ;}
+	\item{Elle doit être d'ordre exponentiel à l'infini, c'est-à-dire respecter la relation suivante
+		\[\exists M>0,\alpha\in\R\mid\vert f(t)\vert<M\,e^{\alpha\,t}\]
+	}
+\end{itemize}
+
+\section{Transformée de Laplace des fonctions usuelles}
+
+\subsection{Échelon unité}
+
+L'échelon unité est la fonction $\Gamma$ définie sur $\R$ comme suit,
+\[\Gamma(t) = \left\{
+	\begin{array}{l}
+		0\quad\forall t<0\\
+		1\quad\forall t\ge 0
+	\end{array}\right.\]
+\begin{figure}[h]
+	\begin{center}
+	\begin{tikzpicture}
+		\draw[->] (-4.1,0) -- (4.1,0)
+			node[anchor=north]{$t$};
+		\draw[->] (0,-0.1) -- (0,3.1)
+			node[anchor=west]{$\Gamma(t)$};
+		\draw[red,thick] (-4,0) -- (0,0) -- (0,2)
+			node[black,anchor=east]{$1$} -- (4,2);
+	\end{tikzpicture}
+	\end{center}
+	\caption{Échelon unité}
+\end{figure}
+
+\begin{align*}
+	\L{\Gamma(t)} & = \int_0^\infty e^{-pt} \times 1\diff{t}\\
+		      & = \lim_{T\to\infty}\left[-\frac{e^{-pt}}{p}\right]_0^T\\
+		      & = \lim_{T\to\infty}\vert e^{-pt}\vert\\
+		      & = \lim_{T\to\infty}\left\lvert e^{\Re(p)t}\right\rvert\\
+		      & = 0\\
+\end{align*}
+
+Donc, $\L{\Gamma(t)}$ existe et $\L{\Gamma(t)} = \frac{1}{p}$.
+
+\subsection{Impulsion de Dirac}
+
+\begin{figure}[h!]
+	\begin{center}
+	\begin{tikzpicture}
+		\draw[->] (-4.1,0) -- (4.1,0)
+			node[anchor=north]{$t$};
+		\draw[->] (0,-0.1) -- (0,3.1)
+			node[anchor=west]{$\delta(t)$};
+		\draw[red,thick] (-4,0) -- (0,0) -- (0,2)
+			node[black,anchor=east]{$\frac{1}{\varepsilon}$} -- (0.5,2) -- (0.5,0)
+			node[black,anchor=north]{$\varepsilon$} -- (4,0);
+	\end{tikzpicture}
+	\end{center}
+	\caption{Fonction créneau}
+\end{figure}
+
+\begin{remark}
+	\[\forall\varepsilon>0,\int_{-\infty}^{+\infty}\delta_\varepsilon(t) = 1\]
+\end{remark}
+
+La famille de fonction des $\delta_\varepsilon$ est appelée créneau. Cependant, lorsque $\varepsilon$ tend vers $0$, on parle d'impulsion de Dirac, notée $\delta$, et sert à représenter en physique des évènements on des actions ayant lieu sur un temps très court. On écirt d'ailleurs abusivement
+\[\delta(t) = \left\{\begin{array}{l}
+	0\quad\forall t\ne 0\\
+	\infty\quad\text{pour }t=0\end{array}\right.\]
+
+\begin{align*}
+	\L{\delta_\varepsilon}                                 & = \int_0^\infty\delta_\varepsilon(t)\,e^{-pt}\diff{t}\\
+	                                                       & = \int_0^\varepsilon\frac{1}{\varepsilon}\,e^{-pt}\diff{t}\\
+			                                       & = \frac{1}{\varepsilon}\int_0^\varepsilon e^{-pt}\diff{t}\\
+			                                       & = \frac{1-e^{-pt}}{p\,\varepsilon}\\
+	\lim_{\varepsilon\to 0}\frac{1-e^{-pt}}{p\,\varepsilon} & = 1
+\end{align*}
+
+Donc, $\L{\delta(t)}$ existe et $\L{\delta(t)} = 1$.
+
+\subsection{Fonction puissance}
+
+Soit un entier naturel $n$. On pose alors $f(t) = t^n$, pour $t\ge 0$, et $f(t) = 0$, pour $t< 0$.
+
+\begin{align*}
+	\L{t^n} & = \int_0^\infty t^n\,e^{-pt}\diff{t}\\
+		& = \left[-\frac{e^{-pt}}{p}t^n\right]_0^\infty + \int_0^\infty\frac{n}{p}t^{n-1}\,e^{-pt}\diff{t}\\
+		& = 0 + \frac{n}{p}\int_0^{n-1}\,e^{-pt}\diff{t}\\
+	        & = \frac{n!}{p^n}\int_0^\infty 1\times e^{-pt}\diff(t) \qquad(\text{On intègre par parties $n$ fois.})\\
+	        & = \frac{n!}{p^n}\left[-\frac{e^{-pt}}{p}\right]_0^\infty
+\end{align*}
+
+Donc, $\L{t^n}$ existe et $\L{t^n} = \frac{n!}{p^{n+1}}$.
+
+\subsection{Fonction exponentielle}
+
+On pose ici $\alpha\in\R$ et $f(t) e^{-\alpha t}$.
+
+\begin{align*}
+	\L{e^{-\alpha t}} & = \int_0^\infty e^{-\alpha t}e^{-pt}\diff{t}\\
+		         & = \int_0^\infty e^{-t(p+\alpha)}\diff{t}\\
+	                 & = \left[-\frac{e^{-t(p+\alpha)}}{p+\alpha}\right]_0^\infty
+\end{align*}
+
+Donc, $\L{e^{-\alpha t}}$ existe et vaut $\frac{1}{p+\alpha}$.
 \end{document}

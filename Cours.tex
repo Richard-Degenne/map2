@@ -361,7 +361,7 @@ Donc, $\L{\delta(t)}$ existe et $\L{\delta(t)} = 1$.
 
 \subsection{Fonction puissance}
 
-Soit un entier naturel $n$. On pose alors $f(t) = t^n$, pour $t\ge 0$, et $f(t) = 0$, pour $t< 0$.
+Soit un entier naturel $n$. On pose alors $f(t) = t^n\,\Gamma(t)$.
 
 \begin{align*}
 	\L{t^n} & = \int_0^\infty t^n\,e^{-pt}\diff{t}\\
@@ -375,13 +375,139 @@ Donc, $\L{t^n}$ existe et $\L{t^n} = \frac{n!}{p^{n+1}}$.
 
 \subsection{Fonction exponentielle}
 
-On pose ici $\alpha\in\R$ et $f(t) e^{-\alpha t}$.
+On pose ici $\alpha\in\R$ et $f(t) = e^{-\alpha t}\,\Gamma(t)$.
 
 \begin{align*}
 	\L{e^{-\alpha t}} & = \int_0^\infty e^{-\alpha t}e^{-pt}\diff{t}\\
-		         & = \int_0^\infty e^{-t(p+\alpha)}\diff{t}\\
-	                 & = \left[-\frac{e^{-t(p+\alpha)}}{p+\alpha}\right]_0^\infty
+		          & = \int_0^\infty e^{-t(p+\alpha)}\diff{t}\\
+	                  & = \left[-\frac{e^{-t(p+\alpha)}}{p+\alpha}\right]_0^\infty
 \end{align*}
 
 Donc, $\L{e^{-\alpha t}}$ existe et vaut $\frac{1}{p+\alpha}$.
+
+\subsection{Fonctions trigonométriques}
+
+\subsubsection{Sinus}
+
+On pose $f(t) = \sin(\omega t)\,\Gamma(t)$.
+
+\begin{align*}
+	\L{\sin(\omega t)} & = \L{\frac{1}{2j}(e^{-j\omega t}-e^{j\omega t})}\\
+	                   & = \frac{1}{2j}\left(\L{e^{-j\omega t}}-\L{e^{j\omega t}}\right)\\
+			   & = \frac{1}{2j}\left(\frac{1}{p-j\omega} - \frac{1}{p+j\omega}\right)\\
+			   & = \frac{\omega}{p^2+\omega^2}\\
+\end{align*}
+
+\subsubsection{Cosinus}
+
+On pose $f(t) = \cos(\omega t)\,\Gamma(t)$.
+
+\begin{align*}
+	\L{\cos(\omega t)} & = \L{\frac{1}{2}(e^{-j\omega t}+e^{j\omega t})}\\
+	                   & = \frac{1}{2}\left(\L{e^{-j\omega t}} + \L{e^{j\omega t}}\right)\\
+			   & = \frac{1}{2}\left(\frac{1}{p+j\omega} + \frac{1}{p-j\omega}\right)\\
+			   & = \frac{p}{p^2+\omega^2}
+\end{align*}
+
+\section{Propriétés}
+
+\subsection{Linéarité}
+
+\[\L{a\,f(t)+b\,g(t)}=a\,\L{f(t)}+b\,\L{g(t)}\]
+
+\subsection{Multiplication par un scalaire}
+
+Soit $\alpha\in\R$ et $f(t)$ telle que $\L{f(t)} = F(p)$.
+
+\[\L{f(\alpha t)}  = \frac{1}{\alpha}F\left(\frac{p}{a}\right)\]
+
+\subsection{Retard}
+
+\begin{figure}[h!]
+	\begin{center}
+	\begin{tikzpicture}
+		\draw[->] (-1.1,0) -- (4.1,0)
+			node[anchor=north]{$t$};
+		\draw[->] (0,-0.1) -- (0,3.1)
+			node[anchor=west]{$f(t)$};
+		\draw[red,thick] (-1,0) -- (0,0) -- (0,1) sin (2,2)
+			node[anchor=south]{$f(t)$};
+		\draw[blue](-1,0) -- (1,0)
+			node[black,anchor=north]{$\alpha$} -- (1,1) sin (3,2)
+			node[anchor=west]{$f(t-\alpha)$};
+	\end{tikzpicture}
+	\end{center}
+	\caption{Fonction retardée}
+\end{figure}
+
+Soit $\alpha\in\R^+$.
+
+\begin{align*}
+	\L{f(t-\alpha)} & = \int_\alpha^\infty f(t-\alpha)\,e^{-pt}\diff{t}\\
+	                & = \int_0^\infty f(x)\,e^{-p(x+\alpha)}\diff{x}\qquad(\text{On pose $x=t-\alpha$})\\
+		        & = e^{-pa}\int_0^\infty f(x)\,e^{-px}\diff{x}\\
+		        & = e^{-pa}\L{f(t)}
+\end{align*}
+
+\begin{example}[Les fonctions périodiques]
+	Soit $f(t)$ une fonction de période $T$. On va ici décomposer la fonction sur chaque période. On définit $f_0(t)=f(t)\forall t\in[0;T] ; 0\forall t\geq T$.
+	\begin{figure}[h!]
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[->] (-0.1,0) -- (10,0) node[anchor=north west]{$t$};
+			\draw[->] (0,-0.1) -- (0,4);
+			\draw (4,2pt) -- (4,-2pt) node[anchor=north]{$T$};
+			\draw (8,2pt) -- (8,-2pt) node[anchor=north]{$2T$};
+
+			\draw[red, very thick] (0,2) sin (1,3) cos (2,2) sin (3,1) cos (4,2) sin (5,3) cos (6,2) sin (7,1) cos (8,2) sin (9,3) node[anchor=west,red]{$f(t)$};
+			\draw[blue] (0,2) sin (1,3) cos (2,2) sin (3,1) cos (4,2) -- (4,0) -- (9,0) node[anchor=south west]{$f_0(t)$};
+		\end{tikzpicture}
+	\end{center}
+	\caption{Décomposition d'une fonction périodique}
+	\end{figure}
+	\begin{align*}
+		\L{f(t)} & = \L{f_0(t)  +f_0(t-T)      +f_0(t-2T)+\dotsb}\\
+		         & = \L{f_0(t)} +\L{f_0(t-T)}  +\L{f_0(t-2T)}+\dotsb\\
+			 & = F_0(p)     +e^{-pT}F_0(p) +e^{-2pT}F_0(p)+\dotsb\\
+			 & = (1+e^{-pT}+e^{-2pT}+\dotsb)F_0(p)\\
+			 & = \frac{1}{1-e^{-pT}}F_0(p)\\
+	\end{align*}
+	Pour les fonctions périodiques usuelles, il faut plutôt utiliser une table de transformée plutôt que cette méthode.
+\end{example}
+
+\subsection{Dérivation}
+
+Soit $f:\R^+\to\R$ une fonction continue par morceaux sur tout intervalle fermé $[0;t_0\subset\R^+$.
+
+\begin{align*}
+	\L{\dot{f}(t)} & = \int_0^\infty\dot{f}(t)\,e^{-pt}\diff{t}\\
+	               & = \left[e^{-pt}f(t)\right]_0^\infty + \int_0^\infty p\times f(t)\,e^{-pt}\diff{t}\\
+\end{align*}
+
+Or, par définition, $\lim_{x\to\infty} f(t)\,e^{-pt} = 0$, ce qui implique que $[f(t)\,e^{-pt}]_0^\infty = -f(0^+)$.
+
+Donc,
+\[\L{\dot{f}(t)\,\Gamma(t)} = p\L{f(t)}-f(0^+)\]
+
+De manière générale, on a
+\[\L{f^{(n)}(t)} = p^n\L{f(t)} - p^{n-1}f(0^+) - p^{n-2}\dot{f}(0^+) - \dotsb - p\times f^{(n-1)}(0^+)\]
+
+\subsection{Primitivation}
+
+Soit $\varphi(t) = \int_0^\infty f(x)\diff{x}$ (c'est-à-dire $\dot{\varphi}(t) = f(t)$) et $\varphi(0^+) = 0$.
+
+On peut alors écrire $\L{\dot{\varphi}(t)} = p\L{\varphi(t)}$.
+
+Or, $\dot{\varphi}(t) = f(t)$, d'où
+\[\L{\varphi(t)} = \frac{\L{f(t)}}{p}\]
+
+\subsection{Théorèmes des valeurs initiale et finale}
+
+On peut déterminer le comportement asymptotique d'une fonction $f(t)$ en ne connaissant que sa transformée.
+
+\begin{align*}
+	\lim_{p\to\infty}p\L{f(t)} & = f(0^+)\\
+	\lim_{p\to 0}p\L{f(t)}     & = f(\infty)\\
+\end{align*}
+
 \end{document}

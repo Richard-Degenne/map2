@@ -641,4 +641,107 @@ Soient $f$ et $g$ deux fonctions causales.
 		 & = \int_0^t f(t)\,g(t-\tau)\diff{\tau}
 \end{align*}
 
+\section{Transformée de Laplace du produit de convolution}
+
+Soient $f$ et $g$ deux fonctions causales.
+
+\begin{align*}
+	\L{f(t)}\times\L{g(t)} & = \int_0^\infty e^{-pu}f(u)\diff{u}\,\int_0^\infty e^{-pv}g(v)\diff{v}\\
+		               & = \int_0^\infty \int_0^\infty e^{-p(u+v)} f(u)\,g(v)\diff{u}\diff{v}\\
+			       & = \int_0^\infty \int_0^\infty e^{-pt} f(t-\tau)\,g(t)\diff{\tau}\diff{t}\\
+			       & = \int_0^\infty e^{-pt} \underbrace{\int_0^\infty f(t-\tau)\,g(t)\diff{\tau}}_{(f*g)(t)}\diff{t}
+\end{align*}
+
+Ainsi, $\L{f*g} = \L{f}\times\L{g}$.
+
+\chapter{Transformée de Laplace inverse}
+
+\section{Définition}
+
+Soit $F(p)$ la transformée de Laplace d'une fonction $f(t)$. On appelle transformée de Laplace inverse, ou original, de $F(p)$, la fonction $f(t)$.
+
+On note $f(t) = \Li{F(p)}$, ou encore $F(p)\xrightarrow{\mathcal{L}^{-1}}f(t)$.
+
+L'existence et l'unicité de l'original ne sont vraies que sous certaines conditions, que l'on admettra vraies pour toute fonction ici.
+
+\begin{itemize}
+	\item{La fonction $f$ doit être continue par morceaux pour tout intervalle fermé de $\R^+$.}
+	\item{La fonction $f$ doit être d'ordre exponentiel à l'infini.}
+\end{itemize}
+
+\section{Propriétés}
+
+\subsection{Linéarité}
+
+Tout comme la transformée de Laplace, la transformée inverse est linéaire.
+\[\forall\ \lambda,\mu\in\R, \Li{\lambda F + \mu G} = \lambda\Li{F} + \mu\Li{G}\]
+
+\subsection{Multiplcation par un réel}
+
+Soit $f(t)$ l'original de $F(p)$. On pose $ax=t$.
+
+\begin{align*}
+	F(ap) & = \int_0^\infty e^{-apx}f(x)\diff{x}\\
+	      & = \frac{1}{a}\int_0^\infty e^{-pt}f\!\left(\frac{t}{a}\right)\diff{t}
+\end{align*}
+
+On en déduit
+\[\Li{F(ap)} = \frac{1}{a}f\!\left(\frac{t}{a}\right)\]
+
+\subsection{Avance -- Retard}
+
+On pose toujours $f(t)$ comme l'original de $F(p)$.
+\begin{align*}
+	F(p+a) & = \int_{0}^\infty e^{-(p+a)t}f(t)\diff{t}\\
+	       & = \int_{0}^{\infty} e^{-pt}\big(e^{-at}f(t)\big)\diff{t}
+\end{align*}
+
+On en conclut que
+\[\Li{F(p+a)} = e^{-at}f(t)\]
+
+\subsection{Dérivation -- Primitivation}
+
+On va ici exprimer $\frac{\partial F(p)}{\partial p}$ en fonction de $f(t)$.
+
+\begin{align*}
+	\frac{\partial F(p)}{\partial p} & = \int_0^\infty\frac{\partial}{\partial p}\big(e^{-pt}f(t)\big)\diff{t}\\
+		                         & = \int_0^\infty -t\,e^{-pt}f(t)\diff{t}\\
+					 & = \int_0^\infty e^{-pt}\big(-t\,f(t)\big)\diff{t}
+\end{align*}
+
+On a par conséquent $\Li{\frac{\partial F(p)}{\partial p}} = -t\,f(t)$.
+
+Faisons de même avec la primitivation.
+
+\begin{align*}
+	\int_p^\infty F(u)\diff{u} & = \int_p^\infty\left(\int_0^\infty e^{-ut}f(t)\diff{t}\right)\diff{u}\\
+	                           & = \int_0^\infty\left(\int_p^\infty e^{-ut}f(t)\diff{u}\right)\diff{t}\\
+				   & = \int_0^\infty f(t)\left[\frac{e^{-ut}}{-t}\right]_p^\infty\diff{t}\\
+				   & = \int_0^\infty e^{-pt}\frac{f(t)}{t}\diff{t}
+\end{align*}
+
+Ainsi, on a
+\[\Li{\int_p^\infty F(u)\diff{u}} = \frac{f(t)}{t}\]
+
+\begin{remark}
+	\[\Li{F^{(n)}(p)} = (-1)^n\,t^n f(t)\]
+\end{remark}
+
+\subsection{Original d'un produit}
+
+Soient $F(p) = \L{f(t)}$ et $G(p) = \L{g(t)}$.
+\[\Li{F(p)\,G(p)} = (f*g)(t)\]
+où $f*g$ désigne le produit de convolution de $f$ par $g$.
+
+\begin{example}{Original de $\frac{1}{p^2(p+1)}$}
+
+On sait d'après une table de transformée que $\Li{\frac{1}{p^2}}=t$ et que $\Li{\frac{1}{p+1}}=e^{-t}$. On peut alors écrire
+
+\begin{align*}
+	\Li{\frac{1}{p^2(p+1)}} & = \int_0^t x\,e^{-(t-x)}\diff{x}\\
+	                        & = e^{-t}\int_0^t x\,e^x\diff{x}\\
+				& = (t-1)+e^{-t}\\
+\end{align*}
+\end{example}
 \end{document}
+

@@ -510,4 +510,135 @@ On peut déterminer le comportement asymptotique d'une fonction $f(t)$ en ne conn
 	\lim_{p\to 0}p\L{f(t)}     & = f(\infty)\\
 \end{align*}
 
+\chapter{Produit de convolution}
+
+\section{Définition}
+
+Lorsqu'il existe, on appelle produit de convolution de deux fonctions $f$ et $g$ la fonction $h$ définie par
+\[\int_{-\infty}^{+\infty}f(t-x)g(x)\diff{x}\]
+
+\begin{remark} On note $h=f*g$ et on lit \emph{"le produit de convolution de $f$ par $g$"} ou \emph{"$f$ étoile $g$"}.\end{remark}
+
+\section{Propriétés}
+
+\subsection{Commutativité}
+
+Le produit de convolution est commutatif, c'est-à-dire que
+\[f*g=g*f\]
+
+\subsection{Associativité}
+
+Le produit de convolution est associatif, c'est-à-dire que
+\[f*(g*h) = (f*g)*h\]
+
+\subsection{Distributivité}
+
+Le produit de convolution est distributif, c'est-à-dire que 
+\[f*(g+h) = f*g\ +\ f*h\]
+
+\section{Produit de convolution et impulsion de Dirac}
+
+On rappelle que l'impulsion de Dirac est la fonction notée $\delta(t)$ définie par un créneau de largeur $\varepsilon\to0$ et d'amplitude $\frac{1}{\varepsilon}\to\infty$ avec $ \varepsilon>0$ telle que $\int_{-\infty}^{+\infty}\delta(t)\diff{t} = 1$.
+
+Soit $f$ une fonction continue sur $\R$.
+
+\begin{align*}
+	\int_{-\infty}^{+\infty}\delta(t)\,f(t)\diff{t} & = \int_0^{\varepsilon}\frac{1}{\varepsilon}f(t)\diff{t}\\
+		                                        & = \frac{1}{\varepsilon}\int_0^{\varepsilon}f(t)\diff{t}\\
+\end{align*}
+
+Ainsi, on peut dire que
+\[\lim_{\varepsilon\to 0}\delta(t)\,f(t) = f(0)\]
+d'où
+\[\int_{-\infty}^{+\infty}\delta(t)\,f(t)\diff{t} = 0\]
+
+Par conséquence, $f*\delta=f$. L'impulsion de Dirac est l'élément neutre du produit de convolution. On peut également définir une $g$ comme l'inverse de $f$ pour le produit de convolution si $f*g=\delta$.
+
+\begin{remark}
+	\[f(t)*\delta(t-t_0) = \int_{-\infty}^{+\infty}f(x)\,\delta\big(x-(t-t_0)\big)\diff{x} = f(t-t_0)\]
+\end{remark}
+
+\section{Applications à la physique}
+
+On va décrire un système physique au moyen d'un opérateur liant un signal d'entrée à un signal de sortie. On cherche à établir l'expression mathématique de cet opérateur.
+
+On dit qu'un système est continu lorsque l'on peut trouver une équation instantanée ou différentielle avec le temps comme variable indépendante donnant la relation entre les signaux d'entrée et de sortie.
+
+\subsection{Système linéaire}
+
+Soit $y(t)$ la réponse du système à un signal d'entrée $x(t)$. Le système est dit linéaire si la réponse du système à $\lambda\,x(t)$ est $\lambda\,y(t)$, où $\lambda$ désigne un réel.
+
+\begin{figure}[h!]
+\begin{center}
+	\begin{tikzpicture}
+		\draw (0,0) -- node[above]{$x(t)$} (1,0);
+		\draw (1,-0.75) rectangle (4,0.75);
+		\draw (4,0) -- node[above]{$y(t)$} (5,0);
+		% TODO Draw an arrow for implication here
+		\begin{scope}[xshift=8cm]
+			\draw (0,0) -- node[above]{$\lambda\,x(t)$} (1,0);
+			\draw (1,-0.75) rectangle (4,0.75);
+			\draw (4,0) -- node[above]{$\lambda\,y(t)$} (5,0);
+		\end{scope}
+	\end{tikzpicture}
+\end{center}
+\caption{Système linéaire}
+\end{figure}
+
+\subsection{Système invariant}
+
+Un système est invariant dans le temps lorsqu'une translation dans le temps de l'entrée $x(t-\tau)$ se traduit par la même translation en sortie du système $y(t-\tau)$.
+
+\begin{figure}[h!]
+\begin{center}
+	\begin{tikzpicture}
+		\draw (0,0) -- node[above]{$x(t)$} (1,0);
+		\draw (1,-0.75) rectangle (4,0.75);
+		\draw (4,0) -- node[above]{$y(t)$} (5,0);
+		% TODO Draw an arrow for implication here
+		\begin{scope}[xshift=8cm]
+			\draw (0,0) -- node[above]{$x(t-\tau)$} (1,0);
+			\draw (1,-0.75) rectangle (4,0.75);
+			\draw (4,0) -- node[above]{$y(t-\tau)$} (5,0);
+		\end{scope}
+	\end{tikzpicture}
+\end{center}
+\caption{Système invariant}
+\end{figure}
+\subsection{Système causal}
+
+En physique, l'effet ne peut précéder la cause. Un système continu est causal si $y(t_0)$ est indépendant de $x(t_1)$, avec $t_1$ postérieur à $t_0$.
+
+De la même manière, on dire que le système est stable si, pour tout signal d'entrée fini, le signal de sortie est fini.
+
+\subsection{Réponse impulsionnelle}
+
+On appelle réponse impulsionnelle d'un système le signal de sortie $h(t)$ obtenu lorsque le signal d'entrée est une impulsion de Dirac.
+
+\begin{figure}[h!]
+\begin{center}
+	\begin{tikzpicture}
+		\draw (0,0) -- node[above]{$\delta(t)$} (1,0);
+		\draw (1,-0.75) rectangle (4,0.75);
+		\draw (4,0) -- node[above]{$h(t)$} (5,0);
+	\end{tikzpicture}
+\end{center}
+\caption{Réponse impulsionnelle}
+\end{figure}
+
+\subsection{Réponse du système à une entrée quelconque}
+
+Un système continu linéaire invariant peut être entièrement décrit par sa réponse impulsionnelle. La connaise de $h(t)$ permet de calculer le signal de sortie correspondant à n'importe quel signal d'entrée $x(t)$.
+
+\[y(t) = \int_{-\infty}^{+\infty} x(\tau)\,h(t-\tau)\diff{\tau} = x*h\]
+
+\subsection{Produit de convolution de fonctions causales}
+
+Soient $f$ et $g$ deux fonctions causales.
+
+\begin{align*}
+	(f*g)(t) & = \int_{-\infty}^{+\infty}f(t)\,\Gamma(t)\times g(t-\tau)\,\Gamma(t-\tau)\diff{\tau}\\
+		 & = \int_0^t f(t)\,g(t-\tau)\diff{\tau}
+\end{align*}
+
 \end{document}

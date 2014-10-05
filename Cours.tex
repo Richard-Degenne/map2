@@ -14,6 +14,7 @@
 \usepackage{setspace} % Pour les espaces
 \usepackage{array} % Pour les tableaux
 \usepackage{tikz} % Pour les graphes
+\usepackage{circuitikz}
 \usepackage{pgfplots} % Pour les fonctions
 
 \setcounter{secnumdepth}{3}
@@ -743,5 +744,125 @@ On sait d'après une table de transformée que $\Li{\frac{1}{p^2}}=t$ et que $\Li{
 				& = (t-1)+e^{-t}\\
 \end{align*}
 \end{example}
-\end{document}
 
+\chapter{Applications de la transformée de Laplace}
+
+\section{Applications mathématiques}
+
+Soit l'équation différentielle suivante :
+\[a_n y^{(n)}(x) + a_{n-1}y^{(n-1)}(x) + \dotsb + a_0y(x) = f(x)\]
+
+La transformée de Laplace et l'exploitation de ses propriétés nous permettent d'écrire que
+\begin{align*}
+\L{y(x)}       & = Y(p)\\
+\L{\dot{y}(x)} & = p\,Y(p) - y(0)\\
+\L{y^{(n)}(x)} & = p^n\,Y(p) - p^{n-1}y(0) - p^{n-2}\dot{y}(0) - \dotsb - y^{(n-1)}(0)
+\end{align*}
+
+En appliquant la transformée de Laplace aux deux membres de l'équation, on obtient, par linéarité, l'équation dans le domaine de Laplace suivante :
+\[(a_n p^n + a_{n-1} p^{n-1} + \dotsb + a_0)Y(p) + \Phi(p) = F(p)\]
+où $\Phi(p)$ désigne un polynôme de degré $n-1$. Après avoir isolé $Y(p)$, on obtient
+\[Y(p) = \frac{F(p)-\Phi(p)}{\sum_{k=0}^{n}a_k p^{k}}\]
+
+\begin{example}{Résoudre $\ddot{y} + 2\dot{y} + y = x\,e^{x}$, avec $y(0)=1$ et $\dot{y}(0)=0$.}
+
+	On commence par appliquer à transformée de Laplace au membre gauche de l'équation.
+	\begin{align*}
+		\L{\ddot{y}-2\dot{y} + y} & = \L{\ddot{y}} + 2\L{\dot{y}} + \L{y}\\
+		                          & = (p^2Y(p) - p\,x - 0) - 2(p\,Y(p)-1) + Y(p)\\
+					  & = (p^2+2p+1)Y(p) - p+2\\
+	\end{align*}
+
+	On transforme ensuite le membre de droite.
+	\begin{align*}
+		\L{x\,e^x} & = -\left(\frac{1}{p-1}\right)^2\\
+		           & = \frac{1}{(p-1)^2}
+	\end{align*}
+
+	On peut donc réécrire complètement l'équation dans le domaine de Laplace.
+	\begin{align*}
+		(p^2+2p+1)Y(p) - p+2 & = \frac{1}{(p-1)^2}\\
+		\iff Y(p)            & = \frac{1}{(p-1)^2}\left(\frac{1}{(p-1)^2}+p-2\right)\\
+		                     & = \frac{1}{(p-1)^4} - \frac{1}{(p-1)^2} + \frac{1}{p-1}
+	\end{align*}
+
+	Enfin, on applique la transformée inverse pour retrouver la fonction dans le domaine temporel.
+	\begin{align*}
+		y(t) & = e^t \frac{1}{3!}t^3 + e^t - t\,e^t\\
+		     & = e^t\left(\frac{t^3}{6}-x+1\right)
+	\end{align*}
+\end{example}
+
+\begin{remark}
+	Cette méthode se généralise à tous les cas d'équations différentielles linéaires à coefficients constants et aux systèmes différentiels linéaires.
+\end{remark}
+
+\section{Applications physiques}
+
+On considère un système linéaire invariant.
+
+\begin{figure}[h!]
+\begin{center}
+	\begin{tikzpicture}
+		\draw (0,0) -- node[above]{$x(t)$} (1,0);
+		\draw (1,-0.75) rectangle node{Système} (4,0.75);
+		\draw (4,0) -- node[above]{$y(t)$} (5,0);
+	\end{tikzpicture}
+\end{center}
+\caption{Système linéaire invariant}
+\end{figure}
+
+Dans les systèmes étudiés, $y(t)$ est lié à $x(t)$ par une équation différentielle linéaire à coefficients constants de la forme
+\[\sum_{k=0}^{n}a_k\frac{\partial^k\,y(t)}{\partial\,t^n} = \sum_{k=0}^{n}b_k\frac{\partial^k\,x(t)}{\partial\,t^n}\]
+
+Quelque soit le signal d'entrée $x(t)$, le signal de sortie sera de la forme $y(p)=x(t)\times h(t)$, soit, dans le domaine de Laplace, $Y(p) = X(p)\times H(p)$.
+
+$H(p)$ est appelée \emph{fonction de transfert} du système, et c'est elle qui le caractérise. On l'exprime sous la forme $H(p)=\frac{X(p)}{Y(p)}$.
+
+\begin{example}{Application à un circuit $RC$.}
+\begin{figure}[h!]
+\begin{center}
+	\begin{circuitikz}
+		\draw (0,3) to [R,l=$R$] (4,3)
+			to [C,l=$C$,v=$v(t)$] (4,0)
+			to [short] (0,0)
+			to [open,v^>=$e(t)$] (0,3);
+	\end{circuitikz}
+\end{center}
+\caption{Circuit $RC$}
+\end{figure}
+
+\begin{align*}
+	e(t) & = v(t) + RC\frac{\partial\,v(t)}{\partial\,t}\\
+	E(p) & = V(p) + RC\,p\,V(p)\\
+	V(p) & = \frac{1}{1+RC} E(p)
+\end{align*}
+
+On en déduit $H(p)$ puis $h(t)$.
+
+\begin{align*}
+	H(p) & = \frac{1}{1+RC\,p}\\
+	h(t) & = \frac{1}{RC}\,e^{-\frac{t}{RC}}
+\end{align*}
+
+\paragraph{Réponse du système à un échelon}
+
+On pose $e(t) = E$, d'où $E(p) = \frac{E}{p}$.
+
+\begin{align*}
+	V(p) & = H(p)\times E(p)\\
+	     & = \frac{1}{1+RC\,p}\times\frac{E}{p}
+	     & = \frac{E}{RC}\left(\frac{a}{p}+\frac{b}{p+\frac{1}{RC}}\right)\qquad(\text{avec }a=RC\text{ et }b=-RC)\\
+	     & = \frac{E}{p} - \frac{E}{p+\frac{1}{RC}}\\
+\end{align*}
+
+On peut alors retrouver $v(t)$ avec la transformée de Laplace inverse.
+
+\begin{align*}
+v(t) & = E\,\Gamma(t)-E\,e^{-\frac{T}{RC}}\\
+     & = E\left(1-e^{-\frac{t}{RC}}\right)\Gamma(t)
+\end{align*}
+
+On peut de la même manière retrouver la réponse du circuit à tous types de signaux d'entrée.
+\end{example}
+\end{document}
